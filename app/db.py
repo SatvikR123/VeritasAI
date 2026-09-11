@@ -487,15 +487,9 @@ def get_trending_topics(limit: int = 4) -> List[Dict[str, Any]]:
     # If empty or older than 15 minutes, refresh them!
     is_stale = latest_time is None or (datetime.utcnow() - latest_time) > timedelta(minutes=15)
     
-    if count == 0:
-        # Empty: run sync so we have data on load
+    if count == 0 or is_stale:
+        # Empty or stale: refresh synchronously so we always return fresh data
         refresh_real_trending_topics()
-    elif is_stale:
-        # Stale: run in background thread so page load is instant
-        import threading
-        thread = threading.Thread(target=refresh_real_trending_topics)
-        thread.daemon = True
-        thread.start()
         
     conn = get_db_connection()
     cursor = conn.cursor()

@@ -284,7 +284,7 @@ def get_llm() -> Optional[BaseChatModel]:
         return ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0)
     elif provider == "groq" or (not provider and os.getenv("GROQ_API_KEY")):
         from langchain_groq import ChatGroq
-        model_name = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+        model_name = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
         max_tokens = int(os.getenv("GROQ_MAX_TOKENS", "4096"))
         logger.info(f"Initializing ChatGroq ({model_name}) with max_tokens={max_tokens}...")
         return ChatGroq(model=model_name, temperature=0, max_tokens=max_tokens)
